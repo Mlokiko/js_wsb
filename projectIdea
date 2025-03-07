@@ -1,6 +1,17 @@
 Wymagania:
 - Backend w express.js 
-- frontend w dowolnym frameworku (angular itp.)
+- frontend w dowolnym frameworku (react, angular, vue itp.)
 
+(propozycja strony od wykładowcy to strona weterynarza)
 
 nasze pomysły na projekt:
+- Ogólny panel rejestracyjny (użytkownik wybiera sobie informacje swojej firmy, dane jakie mają być przekazywane itd. i potem udostępnia to osobom
+od których chce te dane pozyskać?)
+- Odpowiednik google forms - możliwość tworzenia ankiet, wypełniania ich, zarządzania nimi
+- Forum internetowe?
+- Interaktywna strona wizytówka?
+- strona (landing page) dla jakiegoś sklepu? (z bielizną, zabawkami 18+?, z elektrokniką)
+- blog
+- interaktywna strona z memami? (klikasz na obrazek (jego fragment) i wyświetla ci się coś związanego z tym co kliknąłeś. Opcje komentowania memów, dodawnaie lików
+wstawiania nowych memów, moderacji itp.
+- stronka jakiejść restauracji?
