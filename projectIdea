@@ -15,3 +15,16 @@ od których chce te dane pozyskać?)
 - interaktywna strona z memami? (klikasz na obrazek (jego fragment) i wyświetla ci się coś związanego z tym co kliknąłeś. Opcje komentowania memów, dodawnaie lików
 wstawiania nowych memów, moderacji itp.
 - stronka jakiejść restauracji?
+
+
+Wstępnie wybieramy odpowiednik google forms.
+
+Wymagania naszej strony (ekrany/strony)
+- Ekran rejestracji użytkownika strony (osobiste/firmowe konto)
+- Ekran logowania
+- Ekran tworzenia formularza
+- Ekran wypełniania formularza
+- Ekran statystyk formularza - osobno publiczny i osobno dla twórcy
+- Ekran konta - zawierać będzie informacje o użytkowniku, formualrze które stworzył, formularze w których uczestniczył
+
+
