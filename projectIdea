@@ -20,11 +20,17 @@ wstawiania nowych memów, moderacji itp.
 Wstępnie wybieramy odpowiednik google forms.
 
 Wymagania naszej strony (ekrany/strony)
-- Ekran rejestracji użytkownika strony (osobiste/firmowe konto)
+- Ekran rejestracji użytkownika strony (osobiste/firmowe konto, administrator)
 - Ekran logowania
 - Ekran tworzenia formularza
 - Ekran wypełniania formularza
 - Ekran statystyk formularza - osobno publiczny i osobno dla twórcy
 - Ekran konta - zawierać będzie informacje o użytkowniku, formualrze które stworzył, formularze w których uczestniczył
+- Ekran administratora - zarządzanie wszystkimi użytkownikami/formularzami
 
+funkcje/features strony:
+- ofc szyfrowanie kont użytkowników
+- Dodawanie obrazków - standaryzowanie ich za pomocą JS (zmiana rozdzielczości, formatu itp.)
+- Dodanie interaktywnych obrazków? np. obrazek z kurą i jajkiem, pytanie "co było pierwsze?" i użytkownik musi kliknąc na obrazek
+- Dodanie jakichś bardzije skomplikowanych animacji?
 
