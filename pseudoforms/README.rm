@@ -1,0 +1,122 @@
+------------------TODO-----------
+dodanie statusu 404 dla /surveys - "nie można było pobrać ankiet"
+- get /surverys/{id} zwraca ankiete oraz tylko jedno pytanie z ankiety
+- poprawic dane - zeby w bazie nie bylo nipotrzebnej definicji obiektów w options.json itp. itd. zeby dane wszedzie byly prawidlowe odnosnie tego...
+
+
+-------------------changelog------------
+- Dodałem swaggera - npm install swagger-jsdoc swagger-ui-express - plik swagger.js, modyfikacje odnośnie niego w index.js oraz surveyRoutes.js. Zainstalowany normalnie a nie w tym trybie dev,
+
+
+
+
+-------------------------- testy API --------------------------
+
+----TWORZENIE NOWEJ ANKIETY - ANKIETA/PYTANIA
+curl -X POST http://localhost:3000/surveys -H "Content-Type: application/json" -d "{\"title\":\"Ankieta o programowaniu\",\"author\":\"Jan Kowalski\",\"questions\":[{\"text\":\"Jaki język lubisz najbardziej?\",\"question_type\":\"single_choice\",\"options\":[\"JavaScript\",\"Python\",\"C++\"]},{\"text\":\"Czy lubisz backend?\",\"question_type\":\"single_choice\",\"options\":[\"Tak\",\"Nie\"]}]}"
+
+----POBIERANIE/WYŚWIETLENIE WSZYSTKICH ANKIET
+curl http://localhost:3000/surveys
+
+----POBIERANIE/WYŚWIETLENIE KONKRETNEJ ANKIETY
+curl http://localhost:3000/surveys/uuid-survey-1
+
+----DODAWANIE ODPOWIEDZI DO ANKIETY
+curl -X PUT http://localhost:3000/surveys/uuid-survey-1/submit -H "Content-Type: application/json" -d "{\"survey_id\":\"uuid-survey-1\",\"question_id\":1,\"respondent_id\":\"uuid-user-123\",\"response_text_json\":\"{\\\"answer\\\":\\\"Python\\\"}\"}"
+
+----USUWANIE ANKIETY
+curl -X DELETE http://localhost:3000/surveys/uuid-survey-1
+
+---------------------------------------------------------------
+
+
+
+- Tworzenie ankiety (POST /surveys) zwraca utworzoną ankiete z id (UUID)
+curl -X POST http://localhost:3000/surveys -H "Content-Type: application/json" -d "{\"title\":\"Ankieta o programowaniu\",\"author\":\"Jan Kowalski\",\"questions\":[{\"text\":\"Jaki język lubisz najbardziej?\",\"options\":[\"JavaScript\",\"Python\",\"C++\"]},{\"text\":\"Czy lubisz backend?\",\"options\":[\"Tak\",\"Nie\"]}]}"
+
+curl -X POST http://localhost:3000/surveys -H "Content-Type: application/json" -d "{\"title\":\"Twoje nawyki cyfrowe\",\"author\":\"Anna Nowak\",\"questions\":[{\"text\":\"Ile godzin dziennie spędzasz przed ekranem?\",\"options\":[\"^<2h\",\"2-4h\",\"5-8h\",\"więcej niż 8h\"]},{\"text\":\"Z jakiej platformy korzystasz najczęściej?\",\"options\":[\"YouTube\",\"Instagram\",\"TikTok\",\"Facebook\"]}]}"
+
+
+- Wysyłanie odpowiedzi na pytania (PUT) zwraca message
+curl -X PUT http://localhost:3000/surveys/<ID>/submit -H "Content-Type: application/json" -d "{\"answers\":[\"A\",\"B\"]}"
+
+
+- Usuwanie ankiety (DELETE) zwraca message
+curl -X DELETE http://localhost:3000/surveys/<ID>
+
+
+
+======================================================================
+schema do bazy danych (wraz z opisami):
+
+
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,  -- tekstowy, bo będzie generowany funkcją uuidv4()
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS surveys (
+    id TEXT PRIMARY KEY,  -- tekstowy, bo będzie generowany funkcją uuidv4()
+    title TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author_id TEXT -- nie jest wymagany - zakładamy że niezarejestrowany użyszkodnik może stworzyć formularz
+    -- FOREIGN KEY (author_id) REFERENCES users(id)  -- jeżeli chcemy pozwolić niezarejestrowanym tworzyć tabele, nie możemy tego przypisywać...
+);
+
+-- Ma id, które raczej potrzebne jakkolwiek nie jest
+CREATE TABLE IF NOT EXISTS questions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Tutaj autoinkrementacja może być - wyżej uuidv4 było dodatkową formą zabezpieczenia przed "zgadywaniem" kont userów i podszywaniem się pod nich
+    survey_id TEXT NOT NULL, -- tekstowy, bo będzie generowany funkcją uuidv4()
+    question_text TEXT NOT NULL, -- np: 'Lubisz placki?', 'Który z podanych języków lubisz najbardziej?'
+    question_type TEXT NOT NULL, -- np: 'single_choice', 'multiple_choice', 'text' lub 1, 2, 3
+    question_options_json TEXT,  -- np: null (gdy pytanie nie jest multiply_choice), lub zawiera json z opcjami (np: {"options":["javascript","C#","python"]})
+    FOREIGN KEY (survey_id) REFERENCES surveys(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS responses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    survey_id TEXT NOT NULL,
+    question_id INTEGER NOT NULL,
+    response_text_json TEXT NOT NULL, -- zawartość odpowiedzi - zawiera json np: {"answer": "Nie"} lub {"answer": ["HTML", "JavaScript"]}. Odpowiedzi na pytania otwarte też będą w takiej formie podawane. Nie jestem w stanie lepszego rozwiązania znależć
+    respondent_id TEXT,  -- nie wymagany - bo niekoniecznie chcemy zeby kazdy sie logowal zeby wypelnic formularz. Ewentualnie po stronie servera można dać dodatkowe ograniczenia (np. wypelnienie tylko przez zalogowanych userów)
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (survey_id) REFERENCES surveys(id) ON DELETE CASCADE, 
+    FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+    -- FOREIGN KEY (respondent_id) REFERENCES users(id)
+);
+
+==========================================================================================================================================
+Przykładowe dane jakie można ręcznie wkleić do bazy danych:
+
+-- Insert sample users
+INSERT INTO users (id, name, password, email) VALUES 
+('uuid-user-1', 'Jan Kowalski', 'haslo' , 'jan.kowalski@example.com'),
+('uuid-user-2', 'Anna Nowak', 'bramkomobil' , 'anna.nowak@example.com'),
+('uuid-user-3', 'Jakub Waliszewski', 'terminator314' , 'Jakub.Waliszewski@example.com'),
+('uuid-user-4', 'Janusz polczynski', 'polska_gurom' , 'Janusz.Polczynski@example.com'),
+('uuid-user-5', 'Grazyna polczynska', 'polanka' , 'Grazyna.Polczynska@example.com');
+
+-- Insert sample surveys
+INSERT INTO surveys (id, title, author_id) VALUES
+('uuid-survey-1', 'Preferencje językowe', 'uuid-1'),
+('uuid-survey-2', 'Opinie o technologii', NULL), -- Created by an anonymous user
+('uuid-survey-3', 'Preferencje językowe', 'uuid-1'),
+('uuid-survey-4', 'Preferencje językowe', 'uuid-1'),
+('uuid-survey-5', 'Preferencje językowe', 'uuid-1'),
+('uuid-survey-6', 'Preferencje językowe', 'uuid-1');
+
+-- Insert sample questions
+INSERT INTO questions (survey_id, question_text, question_type, question_options_json) VALUES
+('uuid-survey-1', 'Który język programowania lubisz najbardziej?', 'single choice', '{"options":["JavaScript","C#","Python"]}'),
+('uuid-survey-1', 'Dlaczego lubisz wskazany przez siebie język programowania?', 'single choice', '{"options":["Jest prosty do nauki","Jest wygodny w wykorzystaniu","Jest szybki"]}'),
+('uuid-survey-2', 'Czy uważasz AI za przydatne?', 'single choice', '{"options":["Tak","Nie"]}'),
+('uuid-survey-2', 'Dlaczego?', 'text', NULL);
+
+-- Insert sample responses
+INSERT INTO responses (survey_id, question_id, response_text_json, respondent_id) VALUES
+('uuid-survey-1', 1, '{"answer": "Python"}', 'uuid-456'),
+('uuid-survey-2', 2, '{"answer": "Tak"}', NULL), -- Anonymous response
+('uuid-survey-2', 3, '{"answer": "Ponieważ automatyzuje wiele procesów."}', 'uuid-123');
