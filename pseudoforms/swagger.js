@@ -7,12 +7,21 @@ title: `API PseudoForms`,
 version: `1.0.0`,
 description: `PseudoForms API - Opis, którego nie ma, i być nie będzie - nie chce mi sie`,
 },
+tags: [
+    {
+      name: "Ankiety",
+      description: "Wszystko związane z Ankietami",
+    },
+    {
+      name: "Użytkownicy",
+      description: "Wszystko związane z Użytkownikami",
+    }
+  ]
 };
 
 const options = {
 swaggerDefinition,
-apis: ['./routes/*.js'], // Path to the API routes in your Node.js application
-//apis: ['./routes/surveyRoutes.js'],
+apis: ['./routes/*.js'], // Path to the API routes
 };
 
 const swaggerSpec = swaggerJSDoc(options);

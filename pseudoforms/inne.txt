@@ -1,4 +1,4 @@
-kod do surveyRoutes do generowania example dla POST /survey z tylko jednym pytaniem
+kod swaggera do surveyRoutes do generowania example dla POST /survey z tylko jednym pytaniem
 
 
 /**

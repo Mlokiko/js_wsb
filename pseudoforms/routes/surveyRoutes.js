@@ -8,10 +8,12 @@ router.get('/', surveyController.getAllSurveys);
  * /surveys:
  *   get:
  *     summary: Pobierz wszystkie ankiety
+ *     tags:
+ *       - Ankiety
  *     description: Pobiera wszystkie ankiety z bazy SQL. Są to wyłącznie ankiety (tabela surveys), bez pytań do nich ani odpowiedzi
  *     responses:
  *       200:
- *         description: Wszystkie ankiety.
+ *         description: Pobrano wszystkie ankiety.
  *         content:
  *           application/json:
  *             schema:
@@ -32,6 +34,8 @@ router.get('/', surveyController.getAllSurveys);
  *                   author_id:
  *                     type: string
  *                     description: ID autora ankiety.
+ *       500:
+ *           description: Nie udało się pobrać ankiet.
  */
 router.get('/:id', surveyController.getSurveyById);
 /**
@@ -39,6 +43,8 @@ router.get('/:id', surveyController.getSurveyById);
  * /surveys/{id}:
  *   get:
  *     summary: Pobierz ankietę o podanym ID
+ *     tags:
+ *       - Ankiety
  *     description: Pobiera ankietę o podanym ID z bazy danych. Ankieta zawiera informacje zawarte w tabeli surveys oraz odpowiadające dane z questions
  *     parameters:
  *       - in: path
@@ -49,7 +55,7 @@ router.get('/:id', surveyController.getSurveyById);
  *           type: string
  *     responses:
  *       200:
- *         description: Details of the requested survey.
+ *         description: Pobrano ankietę o podanym ID.
  *         content:
  *           application/json:
  *             schema:
@@ -57,17 +63,17 @@ router.get('/:id', surveyController.getSurveyById);
  *               properties:
  *                 id:
  *                   type: string
- *                   description: Unique identifier for the survey.
+ *                   description: ID ankiety (generowane przez uuidv4()).
  *                 title:
  *                   type: string
- *                   description: Title of the survey.
+ *                   description: Tytuł ankiety.
  *                 created_at:
  *                   type: string
  *                   format: date-time
- *                   description: Timestamp of survey creation.
+ *                   description: Timestamp utworzenia ankiety.
  *                 author_id:
  *                   type: string
- *                   description: ID of the survey author.
+ *                   description: ID autora ankiety.
  *       404:
  *         description: Ankieta nie znaleziona.
  */
@@ -77,6 +83,8 @@ router.post('/', surveyController.createSurvey);
  * /surveys:
  *   post:
  *     summary: Stwórz nową ankietę
+ *     tags:
+ *       - Ankiety
  *     description: Dodaje nową ankietę do bazy danych (ankieta oraz pytania do niej). ID jest tworzone przez bazę. Można tworzyć ankietę o tej samej nazwie/autorze/pytaniach
  *     requestBody:
  *       required: true
@@ -130,7 +138,7 @@ router.post('/', surveyController.createSurvey);
  *               properties:
  *                 id:
  *                   type: string
- *                   description: The unique ID of the newly created survey.
+ *                   description: ID ankiety.
  *                 title:
  *                   type: string
  *                 created_at:
@@ -145,7 +153,7 @@ router.post('/', surveyController.createSurvey);
  *                     properties:
  *                       id:
  *                         type: integer
- *                         description: The unique ID of the question.
+ *                         description: ID pytania.
  *                       text:
  *                         type: string
  *                       type:
@@ -155,7 +163,9 @@ router.post('/', surveyController.createSurvey);
  *                         items:
  *                           type: string
  *       400:
- *         description: Bad request - invalid input data.
+ *         description: Brak jednego z wymaganych pól - title, questions.
+ *       500:
+ *         description: Błąd przy tworzeniu ankiety.
  */
 router.put('/:id/submit', surveyController.submitSurvey);
 /**
@@ -163,6 +173,8 @@ router.put('/:id/submit', surveyController.submitSurvey);
  * /surveys/{id}/submit:
  *   put:
  *     summary: Wyślij odpowiedzi do ankiety
+ *     tags:
+ *       - Ankiety
  *     description: Wysyła odpowiedzi do ankiety o podanym id. W przykładzie jest są przygotowane dane dla ankiety z przykładu get /surveys, wystarczy jego id podać
  *     parameters:
  *       - in: path
@@ -194,11 +206,11 @@ router.put('/:id/submit', surveyController.submitSurvey);
  *                       example: 1
  *                     response_text:
  *                       type: string
- *                       description: Text odpowiedzi. dla pytań multi będzie zawierać tablicę (zawierającą elementy z question_options_json), dla single po prosty jedną z opcji, dla otwartych (type - text) znajduje się dowolny tekst napisany przez użytkownika
+ *                       description: Tekst odpowiedzi. dla pytań multi będzie zawierać tablicę (zawierającą elementy z question_options_json), dla single po prosty jedną z opcji, dla otwartych (type - text) znajduje się dowolny tekst napisany przez użytkownika
  *                       example: "Tak!"
  *     responses:
  *       200:
- *         description: Survey successfully submitted.
+ *         description: Wysłano odpowiedzi.
  *         content:
  *           application/json:
  *             schema:
@@ -206,11 +218,13 @@ router.put('/:id/submit', surveyController.submitSurvey);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Survey responses submitted successfully."
+ *                   example: "Wysłano odpowiedzi."
  *       400:
- *         description: Bad request - invalid input data.
+ *         description: Nieprawidłowy typ odpowiedzi - na razie nie zaimplementowane prawidłowo.
  *       404:
- *         description: Survey not found.
+ *         description: Ankieta nie znaleziona.
+ *       500:
+ *         description: Nie udało się wysłać odpowiedzi.
  */
 router.delete('/:id', surveyController.deleteSurvey);
 /**
@@ -218,6 +232,8 @@ router.delete('/:id', surveyController.deleteSurvey);
  * /surveys/{id}:
  *   delete:
  *     summary: Usuń ankietę
+ *     tags:
+ *       - Ankiety
  *     description: Usuwa ankietę o podanym ID z bazy danych.
  *     parameters:
  *       - in: path
@@ -237,6 +253,8 @@ router.delete('/:id', surveyController.deleteSurvey);
  *                 message:
  *                   type: string
  *                   example: "Ankieta została pomyślnie usunięta."
+ *       400:
+ *         description: Brak ID ankiety do usunięcia.
  *       404:
  *         description: Ankieta nie została znaleziona.
  *       500:

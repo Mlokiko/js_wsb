@@ -1,16 +1,18 @@
 ------------------TODO-----------
-dodanie statusu 404 dla /surveys - "nie można było pobrać ankiet"
-- get /surverys/{id} zwraca ankiete oraz tylko jedno pytanie z ankiety
-- poprawic dane - zeby w bazie nie bylo nipotrzebnej definicji obiektów w options.json itp. itd. zeby dane wszedzie byly prawidlowe odnosnie tego...
+- CODE 400 dla /survey/{id}/submit - trzeba dodać, nie wiem jak to dokładnie zrobić
+- Modyfikacja swaggera dla PUT /surveys/{id}/submit - dodanie drugiej odpowiedzi
+- Dodać obsługę userów:
+    - created
+    - change
+    - delete 
+
+- Dodać pobieranie ankiety (po id) ze wszystkimi odpowiedziami (podliczanie ich? dawanie w listę otwartych odpowiedzi?)
+- Wyświetlanie/pobieranie ankiety po z nazwą autora, a nie jego id? (będzie przydatne do wyświetlania w głównym widoku strony)
+
+- Gdy userzy będą zrobieni: zmienić usuwanie ankiety, żeby tylko user który ją stworzył mógł ją usunąć?
 
 
--------------------changelog------------
-- Dodałem swaggera - npm install swagger-jsdoc swagger-ui-express - plik swagger.js, modyfikacje odnośnie niego w index.js oraz surveyRoutes.js. Zainstalowany normalnie a nie w tym trybie dev,
-
-
-
-
--------------------------- testy API --------------------------
+-------------------------- testy API -------------------------- NIEAKTUALNE
 
 ----TWORZENIE NOWEJ ANKIETY - ANKIETA/PYTANIA
 curl -X POST http://localhost:3000/surveys -H "Content-Type: application/json" -d "{\"title\":\"Ankieta o programowaniu\",\"author\":\"Jan Kowalski\",\"questions\":[{\"text\":\"Jaki język lubisz najbardziej?\",\"question_type\":\"single_choice\",\"options\":[\"JavaScript\",\"Python\",\"C++\"]},{\"text\":\"Czy lubisz backend?\",\"question_type\":\"single_choice\",\"options\":[\"Tak\",\"Nie\"]}]}"
@@ -27,24 +29,17 @@ curl -X PUT http://localhost:3000/surveys/uuid-survey-1/submit -H "Content-Type:
 ----USUWANIE ANKIETY
 curl -X DELETE http://localhost:3000/surveys/uuid-survey-1
 
----------------------------------------------------------------
-
-
+--------------------------------------------------------------- NIEAKTUALNE
 
 - Tworzenie ankiety (POST /surveys) zwraca utworzoną ankiete z id (UUID)
 curl -X POST http://localhost:3000/surveys -H "Content-Type: application/json" -d "{\"title\":\"Ankieta o programowaniu\",\"author\":\"Jan Kowalski\",\"questions\":[{\"text\":\"Jaki język lubisz najbardziej?\",\"options\":[\"JavaScript\",\"Python\",\"C++\"]},{\"text\":\"Czy lubisz backend?\",\"options\":[\"Tak\",\"Nie\"]}]}"
-
 curl -X POST http://localhost:3000/surveys -H "Content-Type: application/json" -d "{\"title\":\"Twoje nawyki cyfrowe\",\"author\":\"Anna Nowak\",\"questions\":[{\"text\":\"Ile godzin dziennie spędzasz przed ekranem?\",\"options\":[\"^<2h\",\"2-4h\",\"5-8h\",\"więcej niż 8h\"]},{\"text\":\"Z jakiej platformy korzystasz najczęściej?\",\"options\":[\"YouTube\",\"Instagram\",\"TikTok\",\"Facebook\"]}]}"
-
 
 - Wysyłanie odpowiedzi na pytania (PUT) zwraca message
 curl -X PUT http://localhost:3000/surveys/<ID>/submit -H "Content-Type: application/json" -d "{\"answers\":[\"A\",\"B\"]}"
 
-
 - Usuwanie ankiety (DELETE) zwraca message
 curl -X DELETE http://localhost:3000/surveys/<ID>
-
-
 
 ======================================================================
 schema do bazy danych (wraz z opisami):
