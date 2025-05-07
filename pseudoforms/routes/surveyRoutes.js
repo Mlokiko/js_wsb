@@ -77,7 +77,7 @@ router.post('/', surveyController.createSurvey);
  * /surveys:
  *   post:
  *     summary: Stwórz nową ankietę
- *     description: Dodaje nową ankietę do bazy danych.
+ *     description: Dodaje nową ankietę do bazy danych. ID jest tworzone przez bazę. Można tworzyć ankietę o tej samej nazwie/autorze/pytaniach
  *     requestBody:
  *       required: true
  *       content:
@@ -214,7 +214,35 @@ router.put('/:id/submit', surveyController.submitSurvey);
  *         description: Survey not found.
  */
 router.delete('/:id', surveyController.deleteSurvey);
-
+/**
+ * @swagger
+ * /surveys/{id}:
+ *   delete:
+ *     summary: Usuń ankietę
+ *     description: Usuwa ankietę o podanym ID z bazy danych.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID ankiety którą usuwamy.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ankieta została pomyślnie usunięta.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Ankieta została pomyślnie usunięta."
+ *       404:
+ *         description: Ankieta nie została znaleziona.
+ *       500:
+ *         description: Wewnętrzny błąd serwera.
+ */
 module.exports = router;
 
 

@@ -3,16 +3,16 @@ const swaggerJSDoc = require(`swagger-jsdoc`);
 const swaggerDefinition = {
 openapi: `3.0.0`,
 info: {
-title: `My API`,
+title: `API PseudoForms`,
 version: `1.0.0`,
-description: `Pseuforms API - opis, którego nie ma`,
+description: `PseudoForms API - Opis, którego nie ma, i być nie będzie - nie chce mi sie`,
 },
 };
 
 const options = {
 swaggerDefinition,
-//apis: [`./routes/*.js`], // Path to the API routes in your Node.js application
-apis: [`./routes/surveyRoutes.js`], // Path to the API routes in your Node.js application
+apis: ['./routes/*.js'], // Path to the API routes in your Node.js application
+//apis: ['./routes/surveyRoutes.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

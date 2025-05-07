@@ -3,6 +3,8 @@ const surveyModel = require(`../models/surveyModel`);
 exports.getAllSurveys = () => {
   return surveyModel.getAllSurveys();
 };
+// Metoda wygląda jak wygląda - trzeba odpowiednio obrobić pytania które są w osobnej tabeli, service teoretycznie powinno sie
+// tym zajmować, dlatego tutaj to siedzi
 exports.getSurveyById = (id) => {
   const rawData = surveyModel.getSurveyById(id);
 
