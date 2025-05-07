@@ -1,7 +1,7 @@
 const surveyService = require('../services/surveyService');
 
 // GET /surveys 
-exports.getAllSurveys = (req, res) => {
+exports.getAllSurveys = (res) => {
   try {
     const surveys = surveyService.getAllSurveys();
     res.status(200).json(surveys);

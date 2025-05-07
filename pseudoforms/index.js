@@ -11,7 +11,7 @@ const path = require('path');
 app.use(express.json());
 app.use(`/api-docs`, swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use('/surveys', surveyRoutes);
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 
 //Błędy
 app.use((err, req, res, next) => {

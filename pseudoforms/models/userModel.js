@@ -1,8 +1,8 @@
 const db = require (`../data/db`);
 const { v4: uuidv4 } = require('uuid');
 
-function ShowUser() {
-
+function ShowUser(email) {
+    return db.prepare(`SELECT name, email, created_at FROM users WHERE email = ?`).get(email);
 };
 function RegisterUser() {
   //return db.prepare(`SELECT * FROM surveys`).all();
