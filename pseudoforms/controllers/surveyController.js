@@ -50,13 +50,11 @@ exports.submitSurvey = (req, res) => {
   if (!survey) {
     return res.status(404).json({ error: 'Ankieta nie znaleziona' });
   }
-
   //if (!Array.isArray(answers) || answers.length !== survey.questions.length) {
   // if (submition.question_id != survey.id) {
   //   return res.status(400).json({ error: 'Nieprawidłowy typ odpowiedzi' });
   // }
-
-  const success = surveyService.submitSurvey(id, submition.question_id, submition.respondent_id, submition.response_text_json);
+  const success = surveyService.submitSurvey(id, submition.respondent_id, submition.responses);
 
   if (success) {
     res.status(200).json({ message: 'Odpowiedzi zapisane' });

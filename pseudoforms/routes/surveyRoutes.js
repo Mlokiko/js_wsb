@@ -77,7 +77,7 @@ router.post('/', surveyController.createSurvey);
  * /surveys:
  *   post:
  *     summary: Stwórz nową ankietę
- *     description: Dodaje nową ankietę do bazy danych. ID jest tworzone przez bazę. Można tworzyć ankietę o tej samej nazwie/autorze/pytaniach
+ *     description: Dodaje nową ankietę do bazy danych (ankieta oraz pytania do niej). ID jest tworzone przez bazę. Można tworzyć ankietę o tej samej nazwie/autorze/pytaniach
  *     requestBody:
  *       required: true
  *       content:
@@ -117,7 +117,7 @@ router.post('/', surveyController.createSurvey);
  *               - text: "Czy lubisz pączki?"
  *                 question_type: "single_choice"
  *                 options: ["Tak!", "Nie!", "Zjem jak ktoś mi da"]
- *               - text: "Jaki jest Twój ulubiony smak pączka?"
+ *               - text: "Jakie smaki pączków lubisz?"
  *                 question_type: "multiple_choice"
  *                 options: ["Truskawkowy", "Czekoladowy", "Waniliowy", "Różany"]
  *     responses:
@@ -157,14 +157,13 @@ router.post('/', surveyController.createSurvey);
  *       400:
  *         description: Bad request - invalid input data.
  */
-
 router.put('/:id/submit', surveyController.submitSurvey);
 /**
  * @swagger
  * /surveys/{id}/submit:
  *   put:
  *     summary: Wyślij odpowiedzi do ankiety
- *     description: Wysyła odpowiedzi do ankiety o podanym id.
+ *     description: Wysyła odpowiedzi do ankiety o podanym id. W przykładzie jest są przygotowane dane dla ankiety z przykładu get /surveys, wystarczy jego id podać
  *     parameters:
  *       - in: path
  *         name: id
@@ -244,5 +243,3 @@ router.delete('/:id', surveyController.deleteSurvey);
  *         description: Wewnętrzny błąd serwera.
  */
 module.exports = router;
-
-

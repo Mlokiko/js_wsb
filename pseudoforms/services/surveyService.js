@@ -32,8 +32,8 @@ exports.getSurveyById = (id) => {
 exports.createSurveys = ({ title, author, questions }) => {
   return surveyModel.createSurvey({ title, author, questions });
 };
-exports.submitSurvey = (id, question_id, respondent_id, response_text_json) => {
-  return surveyModel.submitSurvey(id, question_id, respondent_id, response_text_json);
+exports.submitSurvey = (id, respondent_id, responses) => {
+  return surveyModel.submitSurvey(id, respondent_id, responses);
 };
 exports.deleteSurvey = (id) => {
   return surveyModel.deleteSurvey(id);

@@ -34,12 +34,25 @@ function createSurvey({title, author, questions}) {
   return db.prepare(`SELECT * FROM surveys WHERE id = ?`).get(id);
 }
 
-function submitSurvey( surveyId, questionId, respondentId, response ) {
-  const stmt = db.prepare(`INSERT INTO responses (survey_id, question_id, response_text_json, respondent_id, submitted_at) VALUES (?, ?, ?, ?, ?)`);
-  console.log(surveyId, questionId, JSON.stringify(response), respondentId);
-  stmt.run(surveyId, questionId, JSON.stringify(response), respondentId || null, new Date().toISOString());
-  return db.prepare(`SELECT * FROM responses WHERE survey_id = ? AND question_id = ?`).get(surveyId, questionId);
+function submitSurvey(surveyId, respondentId, response) {
+  for (let element of response){
+    const stmt = db.prepare(`INSERT INTO responses (survey_id, question_id, response_text_json, respondent_id, submitted_at) VALUES (?, ?, ?, ?, ?)`);
+    stmt.run(surveyId, element.question_id, JSON.stringify(element.response_text), respondentId || null, new Date().toISOString());
+  }
+  // Co powinno zostać zwrócone? na razie zostawiam wysyłanie wszystkich odpowiedzi DANEGO uzytkownika - bedą błedy jeśli user będzie niezalogowany, ale nie wiem co innego tu wkleic
+  return db.prepare(`SELECT * FROM responses WHERE survey_id = ? AND respondent_id = ?`).get(surveyId, respondentId);
 };
+
+
+// function submitSurvey( surveyId, questionId, respondentId, response ) {
+//   for (let element of responses){
+    
+//   }
+//   const stmt = db.prepare(`INSERT INTO responses (survey_id, question_id, response_text_json, respondent_id, submitted_at) VALUES (?, ?, ?, ?, ?)`);
+//   console.log(surveyId, questionId, JSON.stringify(response), respondentId);
+//   stmt.run(surveyId, questionId, JSON.stringify(response), respondentId || null, new Date().toISOString());
+//   return db.prepare(`SELECT * FROM responses WHERE survey_id = ? AND question_id = ?`).get(surveyId, questionId);
+// };
 
 function deleteSurvey(id) {
   const stmt = db.prepare(`DELETE FROM surveys WHERE id = ?`);
