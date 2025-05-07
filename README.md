@@ -46,6 +46,25 @@ Potem uruchom projekt:
 npm start
 ```
 
+## Użyte technologie
+
+<p>Poza standardowymi wymaganymi w projekcie (JavaScript, Node, HTML/CSS):
+<ul>
+    <li>Swagger - do wygodnego testowania API</li>
+</ul>
+</p>
+
+## Funkcjonalność
+
+<p>Na chwilę obecną projekt zawiera API, które pozwala na:
+<ul>
+    <li>Tworzenie nowego formularza</li>
+    <li>Odczytanie wskazanego przez ID formualarza</li>
+    <li>Stworzenie nowego formularza</li>
+    <li>Uusnięcie wskazanego formularza</li>
+</ul>
+</p>
+
 
 ### Informacje dodatkowe
 
@@ -53,5 +72,5 @@ npm start
 <b>Folder inne</b> - przeznaczony jest na zipy które wysyłamy jako etapy, nasze prace które nie wiemy czy się nadają, zadania na zajęciach itp.
 
 
-API testować najlepiej z poziomu swaggera - dostępny jest na http://localhost:3000/api-docs
+API testować najlepiej z poziomu swaggera - dostępny jest na http://localhost:3000/api-docs<br>
 można też ręcznie testować api - za pomocą curl
