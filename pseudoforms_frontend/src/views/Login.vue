@@ -40,16 +40,18 @@ export default {
   },
   methods: {
     login() {
-      axios.post('/api/login', {
-        email: this.email,
-        password: this.password
-      })
+      // Login.vue
+axios.post('http://localhost:3000/users/login', {
+  email: this.email,
+  password: this.password
+})
+
       .then(response => {
-        console.log(response.data);
-        this.errorMessage = ''; // Reset error message on success
+        localStorage.setItem('user', JSON.stringify(response.data)); // Zapisanie sesji
+        this.$router.push('/'); // Przekierowanie na stronę główną
       })
       .catch(error => {
-        this.errorMessage = 'Wystąpił błąd podczas logowania. Sprawdź swoje dane i spróbuj ponownie.'; // Set error message
+        this.errorMessage = 'Wystąpił błąd podczas logowania. Sprawdź swoje dane i spróbuj ponownie.'; // Ustawienie komunikatu o błędzie
         console.error(error);
       });
     }

@@ -7,7 +7,7 @@ Niezależnie od tego, czy potrzebujesz szybkiego formularza opinii, czy pełnej 
 mamy dla Ciebie rozwiązanie.
       </p>
       <router-link to="/add-form">
-      <button class="add-form-button">+ Add New Form</button>
+      <button class="add-form-button">Dodaj nowy formularz</button>
       </router-link>
     </section>
   </template>

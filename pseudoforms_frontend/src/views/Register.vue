@@ -40,24 +40,23 @@ export default {
   },
   methods: {
     register() {
-      axios.post('/api/register', {
-        name: this.name,
-        email: this.email,
-        password: this.password
-      })
+      axios.put('http://localhost:3000/users/register', {
+  name: this.name,
+  email: this.email,
+  password: this.password
+})
       .then(response => {
-        console.log(response.data);
-        this.errorMessage = ''; // Reset error message on success
+        localStorage.setItem('user', JSON.stringify(response.data)); // Zapisanie sesji
+        this.$router.push('/'); // Przekierowanie na stronę główną
       })
       .catch(error => {
-        this.errorMessage = 'Wystąpił błąd podczas rejestracji. Spróbuj ponownie.'; // Set error message
+        this.errorMessage = 'Wystąpił błąd podczas rejestracji. Spróbuj ponownie.'; // Ustawienie komunikatu o błędzie
         console.error(error);
       });
     }
   }
 }
 </script>
-
 <style scoped>
   h1 {
     font-size: 2rem;

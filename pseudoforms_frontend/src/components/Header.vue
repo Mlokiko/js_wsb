@@ -2,15 +2,39 @@
   <header>
     <router-link to="/" class="logo">FormHub</router-link>
     <nav class="nav-links">
-    <router-link to="/login">
-      <a href="/Login.vue">Logowanie/Rejestracja</a>
-    </router-link>
-    <router-link to="/manage-account">
-      <a href="#">Dane konta</a>
-    </router-link>
+      <router-link v-if="!isLoggedIn" to="/login">
+        <a href="#">Logowanie/Rejestracja</a>
+      </router-link>
+      <router-link v-if="isLoggedIn" to="/manage-account">
+        <a href="#">Dane konta</a>
+      </router-link>
+      <router-link v-if="isLoggedIn" @click.prevent="logout">
+        <a @click="logout">Wyloguj</a>
+      </router-link>
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  name: 'Header',
+  data() {
+    return {
+      isLoggedIn: false
+    };
+  },
+  mounted() {
+    this.isLoggedIn = !!localStorage.getItem('user'); // Sprawdzenie, czy użytkownik jest zalogowany
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('user'); // Usunięcie sesji
+      this.isLoggedIn = false; // Zaktualizowanie stanu
+      this.$router.push('/'); // Przekierowanie na stronę główną
+    },
+  }
+}
+</script>
 
 <style scoped>
 header {

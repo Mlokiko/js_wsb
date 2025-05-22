@@ -1,7 +1,6 @@
 <template>
   <div>
     <Header />
-    <form>
     <h1>Zarządzanie kontem</h1>
     <p>Witaj, {{ user.name }}!</p>
     <p>Twoje konto:</p>
@@ -9,7 +8,17 @@
       <li>Imię i nazwisko: {{ user.name }}</li>
       <li>Adres e-mail: {{ user.email }}</li>
     </ul>
-    <button @click="logout">Wyloguj się</button>
+    <form @submit.prevent="changeName">
+      <label for="newName">Nowa nazwa użytkownika:</label>
+      <input type="text" id="newName" v-model="newName" />
+      <button type="submit">Zmień nazwę</button>
+    </form>
+    <form @submit.prevent="changePassword">
+      <label for="oldPassword">Stare hasło:</label>
+      <input type="password" id="oldPassword" v-model="oldPassword" required />
+      <label for="newPassword">Nowe hasło:</label>
+      <input type="password" id="newPassword" v-model="newPassword" required />
+      <button type="submit">Zmień hasło</button>
     </form>
     <Footer />
   </div>
@@ -18,33 +27,64 @@
 <script>
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
+import axios from 'axios';
 
 export default {
   name: 'ManageAccount',
   components: {
-      Header,
-      Footer
-    },
+    Header,
+    Footer
+  },
   data() {
     return {
-      user: {}
-    }
+      user: {},
+      newName: '',
+      oldPassword: '',
+      newPassword: ''
+    };
   },
-  
+  mounted() {
+    this.fetchUser ();
+  },
   methods: {
+    fetchUser () {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        this.user = user; // Ustawienie danych użytkownika
+      }
+    },
+    async changeName() {
+      try {
+        await axios.patch('http://localhost:3000/users/change-name', {
+          email: this.user.email,
+          newName: this.newName
+        });
+        this.user.name = this.newName; // Aktualizacja nazwy użytkownika w stanie
+        this.newName = ''; // Resetowanie pola
+      } catch (error) {
+        console.error('Error changing name:', error);
+      }
+    },
+    async changePassword() {
+      try {
+        await axios.patch('http://localhost:3000/users/change-password', {
+          email: this.user.email,
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword
+        });
+        this.oldPassword = ''; // Resetowanie pola
+        this.newPassword = ''; // Resetowanie pola
+      } catch (error) {
+        console.error('Error changing password:', error);
+      }
+    },
     logout() {
-      axios.post('/api/logout')
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.error(error)
-        })
+      localStorage.removeItem('user'); // Usunięcie sesji
+      this.$router.push('/'); // Przekierowanie na stronę główną
     }
   }
 }
 </script>
-
 <style scoped>
   h1 {
     font-size: 2rem;

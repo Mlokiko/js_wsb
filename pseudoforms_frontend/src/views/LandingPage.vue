@@ -5,11 +5,11 @@
     <div style="text-align: center; margin: 2rem;">
       <!-- Button to Fetch All Forms -->
       <router-link to="/all-forms">
-        <button class="fetch-button">Fetch All Forms</button>
+        <button class="fetch-button">Wyświetl wszystkie formularze</button>
       </router-link>
       <!-- Button to Add New Form -->
       <router-link to="/add-form">
-        <button class="add-button">Add New Form</button>
+        <button class="add-button">Stwórz nowy formularz</button>
       </router-link>
     </div>
     <RecentForms :forms="recentForms" />
