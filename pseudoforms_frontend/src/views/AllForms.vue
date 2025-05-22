@@ -2,13 +2,13 @@
     <div>
       <Header />
       <section class="all-forms">
-        <h2>All Forms</h2>
-        <div v-if="loading">Loading forms...</div>
+        <h2>Wszystkie Formularze</h2>
+        <div v-if="loading">Ładowanie Formularzy...</div>
         <div v-else-if="error">{{ error }}</div>
         <div v-else class="form-list">
           <div class="form-item" v-for="form in forms" :key="form.id">
             <h3>{{ form.title }}</h3>
-            <p>Created on {{ formatDate(form.created_at) }}</p>
+            <p>Stworzone dnia {{ formatDate(form.created_at) }}</p>
           </div>
         </div>
       </section>

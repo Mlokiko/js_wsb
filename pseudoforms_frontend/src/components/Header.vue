@@ -2,8 +2,12 @@
   <header>
     <router-link to="/" class="logo">FormHub</router-link>
     <nav class="nav-links">
-      <a href="#">Login/Register</a>
-      <a href="#">Manage Account</a>
+    <router-link to="/login">
+      <a href="/Login.vue">Logowanie/Rejestracja</a>
+    </router-link>
+    <router-link to="/manage-account">
+      <a href="#">Dane konta</a>
+    </router-link>
     </nav>
   </header>
 </template>

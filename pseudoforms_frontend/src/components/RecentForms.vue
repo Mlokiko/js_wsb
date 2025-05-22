@@ -1,6 +1,6 @@
 <template>
   <section class="recent-forms">
-    <h2>Recently Added Forms</h2>
+    <h2>Ostatni dodane formularze</h2>
     <div class="form-list">
       <div class="form-item" v-for="(form, index) in forms" :key="index">
         <h3>{{ form.title }}</h3>

@@ -1,162 +1,127 @@
 <template>
-    <div>
-      <Header />
-      <div class="form-container">
-        <h2>Add New Form</h2>
-        <form @submit.prevent="submitForm">
-          <div class="form-field">
-            <label for="title">Form Title:</label>
-            <input type="text" id="title" v-model="formData.title" required />
+  <div>
+    <Header />
+    <div class="form-container">
+      <h2>Dodaj nowy formularz</h2>
+      <form @submit.prevent="submitForm">
+        <div class="form-field">
+          <label for="title">Tytuł Formularza:</label>
+          <input type="text" id="title" v-model="formData.title" required />
+        </div>
+        
+        <div class="form-field">
+          <label for="author">Autor (opcjonalnie):</label>
+          <input type="text" id="author" v-model="formData.author" />
+        </div>
+
+        <div class="questions-container">
+          <div v-for="(question, qIndex) in formData.questions" :key="qIndex" class="question">
+            <h3>Pytanie {{ qIndex + 1 }}</h3>
+
+            <div class="form-field">
+              <label>Tekst Pytania:</label>
+              <input type="text" v-model="question.text" placeholder="Wprowadź pytanie" required />
+            </div>
+
+            <div class="form-field">
+              <label>Typ Pytania:</label>
+              <select v-model="question.question_type" required>
+                <option value="single_choice">Pytanie jednokrotnego wyboru</option>
+                <option value="multiple_choice">Pytanie wielokrotnego wyboru</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label>Opcje:</label>
+              <div v-for="(option, oIndex) in question.options" :key="oIndex" class="option-item">
+                <input
+                  type="text"
+                  v-model="question.options[oIndex]"
+                  placeholder="Wprowadź opcje(przecinki dozwolone)"
+                  required
+                />
+                <button @click.prevent="removeOption(qIndex, oIndex)" type="button">Usuń</button>
+              </div>
+              <button @click.prevent="addOption(qIndex)" type="button">Dodaj opcję</button>
+            </div>
+
+            <button @click.prevent="removeQuestion(qIndex)">Usuń pytanie</button>
           </div>
-          
-          <div class="form-field">
-            <label for="author">Author (optional):</label>
-            <input type="text" id="author" v-model="formData.author" />
-          </div>
-  
-          <div class="questions-container">
-  <div v-for="(question, qIndex) in formData.questions" :key="qIndex" class="question">
-    <h3>Question {{ qIndex + 1 }}</h3>
 
-    <div class="form-field">
-      <label>Question Text:</label>
-      <input type="text" v-model="question.text" placeholder="Enter question" required />
+          <button @click.prevent="addQuestion" type="button">Dodaj pytanie</button>
+        </div>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <button type="submit">Zapisz formularz</button>
+      </form>
     </div>
-
-    <div class="form-field">
-      <label>Question Type:</label>
-      <select v-model="question.question_type" required>
-        <option value="single_choice">Single Choice</option>
-        <option value="multiple_choice">Multiple Choice</option>
-      </select>
-    </div>
-
-    <div class="form-field">
-      <label>Options:</label>
-      <div v-for="(option, oIndex) in question.options" :key="oIndex" class="option-item">
-        <input
-          type="text"
-          v-model="question.options[oIndex]"
-          placeholder="Enter option (commas allowed)"
-          required
-        />
-        <button @click.prevent="removeOption(qIndex, oIndex)" type="button">Remove</button>
-      </div>
-      <button @click.prevent="addOption(qIndex)" type="button">Add Option</button>
-    </div>
-
-    <button @click.prevent="removeQuestion(qIndex)">Remove Question</button>
+    <Footer />
   </div>
+</template>
 
-  <button @click.prevent="addQuestion" type="button">Add Question</button>
-</div>
+<script>
+import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
+import axios from 'axios';
 
-        </form>
-      </div>
-      <Footer />
-    </div>
-  </template>
-  
-  <script>
-  import Header from '../components/Header.vue';
-  import Footer from '../components/Footer.vue';
-  
-  export default {
-    name: 'AddForm',
-    components: {
-      Header,
-      Footer
-    },
-    data() {
-      return {
-        formData: {
-          title: '',
-          author: null,
-          questions: [
-            {
-              text: '',
-              question_type: 'single_choice',
-              options: ['']
-            }
-          ]
-        }
-      };
-    },
-    methods: {
-
-
-      
-      // Add a new question to the form
-      addQuestion() {
-        this.formData.questions.push({
-          text: '',
-          question_type: 'single_choice',
-          options: ['']
-        });
+export default {
+  name: 'AddForm',
+  components: {
+    Header,
+    Footer
+  },
+  data() {
+    return {
+      formData: {
+        title: '',
+        author: null,
+        questions: [
+          {
+            text: '',
+            question_type: 'single_choice',
+            options: ['']
+          }
+        ]
       },
-      
-      addQuestion() {
-    this.formData.questions.push({
-      text: '',
-      question_type: 'single_choice',
-      options: ['']
-    });
+      errorMessage: ''
+    };
   },
-  removeQuestion(index) {
-    this.formData.questions.splice(index, 1);
-  },
-  addOption(questionIndex) {
-    this.formData.questions[questionIndex].options.push('');
-  },
-  removeOption(questionIndex, optionIndex) {
-    this.formData.questions[questionIndex].options.splice(optionIndex, 1);
-  },
-  async submitForm() {
-    try {
-      const response = await fetch('http://localhost:3000/surveys', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.formData)
+  methods: {
+    addQuestion() {
+      this.formData.questions.push({
+        text: '',
+        question_type: 'single_choice',
+        options: ['']
       });
+    },
+    removeQuestion(index) {
+      this.formData.questions.splice(index, 1);
+    },
+    addOption(questionIndex) {
+      this.formData.questions[questionIndex].options.push('');
+    },
+    removeOption(questionIndex, optionIndex) {
+      this.formData.questions[questionIndex].options.splice(optionIndex, 1);
+    },
+    async submitForm() {
+      try {
+        const response = await fetch('http://localhost:3000/surveys', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(this.formData)
+        });
 
-      if (!response.ok) throw new Error('Failed to submit form');
-      this.$router.push('/all-forms');
-    } catch (err) {
-      console.error('Submission error:', err);
-      alert('Failed to submit form.');
-    }
-  },
-
-      // Remove a question from the form
-      removeQuestion(index) {
-        this.formData.questions.splice(index, 1);
-      },
-      
-      // Submit form data
-      async submitForm() {
-        try {
-          const res = await fetch('http://localhost:3000/surveys', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.formData)
-          });
-  
-          if (!res.ok) throw new Error('Failed to create form');
-          
-          // Redirect to the "All Forms" page after successfully adding the form
-          this.$router.push('/all-forms');
-        } catch (error) {
-          console.error('Error:', error);
-          alert('Error submitting the form.');
-        }
+        if (!response.ok) throw new Error('Failed to submit form');
+        this.$router.push('/all-forms');
+      } catch (err) {
+        console.error('Submission error:', err);
+        this.errorMessage = 'Wystąpił błąd podczas dodawania formularza. Spróbuj ponownie.'; // Set error message
       }
     }
-  };
-  </script>
+  }
+};
+</script>
   
   <style scoped>
   .form-container {

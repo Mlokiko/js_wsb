@@ -1,12 +1,14 @@
 <template>
     <section class="hero">
-      <h1>Welcome to FormHub</h1>
+      <h1>Witaj w FormHub</h1>
       <p>
-        Create, share, and manage all your online forms in one place.
-        Whether you need a quick feedback form or a full survey,
-        we’ve got you covered.
+        Twórz, udostępniaj i zarządzaj wszystkimi swoimi formularzami online w jednym miejscu.
+Niezależnie od tego, czy potrzebujesz szybkiego formularza opinii, czy pełnej ankiety,
+mamy dla Ciebie rozwiązanie.
       </p>
+      <router-link to="/add-form">
       <button class="add-form-button">+ Add New Form</button>
+      </router-link>
     </section>
   </template>
   

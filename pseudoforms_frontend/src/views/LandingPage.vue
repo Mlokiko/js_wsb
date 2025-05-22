@@ -35,24 +35,24 @@ export default {
     return {
       recentForms: [
         {
-          title: 'Customer Feedback',
-          description: 'Collect feedback from your customers about recent purchases.'
+          title: 'Opinie użytkowników',
+          description: 'Zbieraj opinie klientów na temat ostatnich zakupów.'
         },
         {
-          title: 'Job Application',
-          description: 'Application form for our open positions.'
+          title: 'Podanie o pracę',
+          description: 'Formularz aplikacyjny na nasze wolne stanowiska.'
         },
         {
-          title: 'Event Registration',
-          description: 'Let users register for your events easily.'
+          title: 'Rejestracja wydarzenia',
+          description: 'Umożliw użytkownikom łatwą rejestrację na Twoje wydarzenia.'
         },
         {
-          title: 'Survey 2025',
-          description: 'Annual survey to understand user satisfaction.'
+          title: 'Ankieta 2025',
+          description: 'Roczne badanie mające na celu zrozumienie poziomu zadowolenia użytkowników.'
         },
         {
-          title: 'Newsletter Signup',
-          description: 'Form to collect emails for our weekly newsletter.'
+          title: 'Zapisz się do newslettera',
+          description: 'Formularz służący do zbierania adresów e-mail, na które będziemy wysyłać nasz cotygodniowy newsletter.'
         }
       ]
     };
