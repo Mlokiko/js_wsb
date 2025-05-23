@@ -314,5 +314,7 @@ router.delete('/delete/:id', userController.DeleteUser);
  *       500:
  *         description: Wewnętrzny błąd serwera.
  */
+router.get('/:id/forms', userController.getUserForms);
+router.get('/:id/responses', userController.getUserResponses);
 
 module.exports = router;

@@ -2,15 +2,10 @@
   <header>
     <router-link to="/" class="logo">FormHub</router-link>
     <nav class="nav-links">
-      <router-link v-if="!isLoggedIn" to="/login">
-        <a href="#">Logowanie/Rejestracja</a>
-      </router-link>
-      <router-link v-if="isLoggedIn" to="/manage-account">
-        <a href="#">Dane konta</a>
-      </router-link>
-      <router-link v-if="isLoggedIn" @click.prevent="logout">
-        <a @click="logout">Wyloguj</a>
-      </router-link>
+      <router-link v-if="!isLoggedIn" to="/login">Logowanie/Rejestracja</router-link>
+      <router-link v-if="isLoggedIn" to="/my-forms">Moje formularze</router-link>
+      <router-link v-if="isLoggedIn" to="/manage-account">Dane konta</router-link>
+      <a v-if="isLoggedIn" @click.prevent="logout" href="#">Wyloguj</a>
     </nav>
   </header>
 </template>
@@ -29,11 +24,12 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem('user'); // Usunięcie sesji
-      this.isLoggedIn = false; // Zaktualizowanie stanu
-      this.$router.push('/'); // Przekierowanie na stronę główną
-    },
+      localStorage.removeItem('userId'); // (jeśli używasz userId też!)
+      this.isLoggedIn = false;
+      this.$router.push('/');
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -53,9 +49,14 @@ header {
   font-weight: bold;
 }
 
-.nav-links a {
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links a,
+.nav-links .router-link-active {
   color: white;
-  margin-left: 1rem;
   text-decoration: none;
 }
 </style>

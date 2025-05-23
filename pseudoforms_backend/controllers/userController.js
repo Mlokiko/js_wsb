@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const userService = require('../services/userService');
+const surveyModel = require('../models/surveyModel'); //  potrzebne do getUserForms
+const db = require('../data/db'); //  potrzebne do getUserResponses
 
 exports.ShowUser = (req, res) => {
   const { email } = req.params;
@@ -99,4 +101,23 @@ exports.DeleteUser = (req, res) => {
   }
 
   res.json({ message: 'Użytkownik został usunięty.' });
+};
+
+// Formularze utworzone przez użytkownika
+exports.getUserForms = (req, res) => {
+  const userId = req.params.id;
+  const forms = surveyModel.getAllSurveys().filter(f => f.author === userId);
+  res.json(forms);
+};
+
+//  Formularze, na które odpowiedział użytkownik
+exports.getUserResponses = (req, res) => {
+  const userId = req.params.id;
+  const forms = db.prepare(`
+    SELECT DISTINCT s.*
+    FROM surveys s
+    JOIN responses r ON s.id = r.survey_id
+    WHERE r.respondent_id = ?
+  `).all(userId);
+  res.json(forms);
 };

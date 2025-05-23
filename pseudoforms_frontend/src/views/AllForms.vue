@@ -8,8 +8,11 @@
         <div v-else class="form-list">
           <div class="form-item" v-for="form in forms" :key="form.id">
             <h3>{{ form.title }}</h3>
-            <p>Autor: {{ form.author || 'Brak' }}</p>
+             <p>Autor: {{ form.author || 'Brak' }}</p>
             <p>Stworzone dnia {{ formatDate(form.created_at) }}</p>
+            <router-link :to="{ name: 'FillForm', params: { formId: form.id } }">
+            <button>Wypełnij formularz</button>
+          </router-link>
           </div>
         </div>
       </section>

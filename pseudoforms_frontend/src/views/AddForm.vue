@@ -8,11 +8,6 @@
           <label for="title">Tytuł Formularza:</label>
           <input type="text" id="title" v-model="formData.title" required />
         </div>
-        
-        <div class="form-field">
-          <label for="author">Autor (opcjonalnie):</label>
-          <input type="text" id="author" v-model="formData.author" />
-        </div>
 
         <div class="questions-container">
           <div v-for="(question, qIndex) in formData.questions" :key="qIndex" class="question">
@@ -28,16 +23,17 @@
               <select v-model="question.question_type" required>
                 <option value="single_choice">Pytanie jednokrotnego wyboru</option>
                 <option value="multiple_choice">Pytanie wielokrotnego wyboru</option>
+                <option value="open">Pytanie otwarte</option>
               </select>
             </div>
 
-            <div class="form-field">
+            <div class="form-field" v-if="question.question_type !== 'open'">
               <label>Opcje:</label>
               <div v-for="(option, oIndex) in question.options" :key="oIndex" class="option-item">
                 <input
                   type="text"
                   v-model="question.options[oIndex]"
-                  placeholder="Wprowadź opcje(przecinki dozwolone)"
+                  placeholder="Wprowadź opcję"
                   required
                 />
                 <button @click.prevent="removeOption(qIndex, oIndex)" type="button">Usuń</button>
@@ -50,6 +46,7 @@
 
           <button @click.prevent="addQuestion" type="button">Dodaj pytanie</button>
         </div>
+
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
         <button type="submit">Zapisz formularz</button>
       </form>
@@ -61,19 +58,14 @@
 <script>
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
-import axios from 'axios';
 
 export default {
   name: 'AddForm',
-  components: {
-    Header,
-    Footer
-  },
+  components: { Header, Footer },
   data() {
     return {
       formData: {
         title: '',
-        author: null,
         questions: [
           {
             text: '',
@@ -104,78 +96,69 @@ export default {
     },
     async submitForm() {
       try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const author = user?.name || null;
+
+        const payload = {
+          ...this.formData,
+          author
+        };
+
         const response = await fetch('http://localhost:3000/surveys', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.formData)
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
 
-        if (!response.ok) throw new Error('Failed to submit form');
+        if (!response.ok) throw new Error('Błąd przy zapisie formularza');
         this.$router.push('/all-forms');
       } catch (err) {
-        console.error('Submission error:', err);
-        this.errorMessage = 'Wystąpił błąd podczas dodawania formularza. Spróbuj ponownie.'; // Set error message
+        console.error('Błąd zapisu:', err);
+        this.errorMessage = 'Wystąpił błąd podczas dodawania formularza. Spróbuj ponownie.';
       }
     }
   }
 };
 </script>
-  
-  <style scoped>
-  .form-container {
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .form-field {
-    margin-bottom: 1rem;
-  }
-  
-  .form-field label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  .form-field input,
-  .form-field textarea,
-  .form-field select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .form-actions {
-    text-align: right;
-  }
-  
-  .form-actions button {
-    background-color: #10b981;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .questions-container {
-    margin-top: 2rem;
-  }
-  
-  .question {
-    margin-bottom: 2rem;
-  }
-  
-  button {
-    margin-top: 1rem;
-  }
-  </style>
-  
+
+<style scoped>
+.form-container {
+  padding: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+.form-field {
+  margin-bottom: 1rem;
+}
+.form-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+input,
+select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #4f46e5;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #3730a3;
+}
+.error {
+  color: red;
+  font-weight: bold;
+}
+</style>
