@@ -5,6 +5,8 @@
       <router-link v-if="!isLoggedIn" to="/login">
         <a href="#">Logowanie/Rejestracja</a>
       </router-link>
+      <router-link v-if="isLoggedIn" to="/my-forms"> <a href="#">Moje formularze</a></router-link>
+
       <router-link v-if="isLoggedIn" to="/manage-account">
         <a href="#">Dane konta</a>
       </router-link>

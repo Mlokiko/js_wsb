@@ -9,7 +9,7 @@
       </router-link>
       <!-- Button to Add New Form -->
       <router-link to="/add-form">
-        <button class="add-button">Stwórz nowy formularz</button>
+        <button class="add-button">Dodaj nowy formularz</button>
       </router-link>
     </div>
     <RecentForms :forms="recentForms" />

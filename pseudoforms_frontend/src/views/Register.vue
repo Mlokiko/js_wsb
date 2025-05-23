@@ -49,6 +49,10 @@ export default {
         localStorage.setItem('user', JSON.stringify(response.data)); // Zapisanie sesji
         this.$router.push('/'); // Przekierowanie na stronę główną
       })
+      .then(response => {
+    localStorage.setItem('user.name', response.data.name); // Zapisanie nazwy użytkownika
+    this.$router.push('/'); // Przekierowanie na stronę główną
+  })
       .catch(error => {
         this.errorMessage = 'Wystąpił błąd podczas rejestracji. Spróbuj ponownie.'; // Ustawienie komunikatu o błędzie
         console.error(error);

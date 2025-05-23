@@ -59,7 +59,15 @@ export default {
           email: this.user.email,
           newName: this.newName
         });
-        this.user.name = this.newName; // Aktualizacja nazwy użytkownika w stanie
+        localStorage.removeItem('user');
+        this.user.name = this.newName;
+        axios.post('http://localhost:3000/users/login', {
+          email: this.user.email,
+          password: this.password
+        });
+ // Aktualizacja nazwy użytkownika w stanie
+        localStorage.setItem('user', JSON.stringify(response.data)); // Zapisanie sesji
+        this.$router.push('/'); // Przekierowanie na stronę główną
         this.newName = ''; // Resetowanie pola
       } catch (error) {
         console.error('Error changing name:', error);

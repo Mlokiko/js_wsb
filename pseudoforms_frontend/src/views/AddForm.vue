@@ -9,10 +9,7 @@
           <input type="text" id="title" v-model="formData.title" required />
         </div>
         
-        <div class="form-field">
-          <label for="author">Autor (opcjonalnie):</label>
-          <input type="text" id="author" v-model="formData.author" />
-        </div>
+        
 
         <div class="questions-container">
           <div v-for="(question, qIndex) in formData.questions" :key="qIndex" class="question">
@@ -28,6 +25,7 @@
               <select v-model="question.question_type" required>
                 <option value="single_choice">Pytanie jednokrotnego wyboru</option>
                 <option value="multiple_choice">Pytanie wielokrotnego wyboru</option>
+                <option value="open">Pytanie otwarte</option>
               </select>
             </div>
 
@@ -73,7 +71,7 @@ export default {
     return {
       formData: {
         title: '',
-        author: null,
+        author: null, // Możesz to ustawić na null, a później przypisać ID
         questions: [
           {
             text: '',
@@ -104,6 +102,14 @@ export default {
     },
     async submitForm() {
       try {
+        // Pobierz dane użytkownika z localStorage
+        const userData = JSON.parse(localStorage.getItem('user'));
+        if (userData && userData.name) {
+          this.formData.author = userData.name; // Przypisz ID użytkownika do pola author
+        } else {
+          this.formData.author = 'anonymous'; // Ustaw na 'anonymous' jeśli brak ID
+        }
+
         const response = await fetch('http://localhost:3000/surveys', {
           method: 'POST',
           headers: {
@@ -122,60 +128,59 @@ export default {
   }
 };
 </script>
-  
-  <style scoped>
-  .form-container {
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .form-field {
-    margin-bottom: 1rem;
-  }
-  
-  .form-field label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  .form-field input,
-  .form-field textarea,
-  .form-field select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .form-actions {
-    text-align: right;
-  }
-  
-  .form-actions button {
-    background-color: #10b981;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .questions-container {
-    margin-top: 2rem;
-  }
-  
-  .question {
-    margin-bottom: 2rem;
-  }
-  
-  button {
-    margin-top: 1rem;
-  }
-  </style>
-  
+
+<style scoped>
+.form-container {
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+.form-actions button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.questions-container {
+  margin-top: 2rem;
+}
+
+.question {
+  margin-bottom: 2rem;
+}
+
+button {
+  margin-top: 1rem;
+}
+</style>
