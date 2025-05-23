@@ -22,6 +22,24 @@ exports.getSurveyById = (req, res) => {
   res.status(200).json(survey);
 };
 
+exports.getResponsesBySurveyId = async (req, res) => {
+  const surveyId = req.params.id;
+
+  try {
+    const responses = await surveyService.getResponsesBySurveyId(surveyId);
+
+    if (!responses || responses.length === 0) {
+      return res.status(404).json({ message: 'Brak odpowiedzi lub nie znaleziono ankiety.' });
+    }
+
+    res.status(200).json(responses);
+  } catch (error) {
+    console.error('Błąd przy pobieraniu odpowiedzi:', error);
+    res.status(500).json({ message: 'Błąd serwera.' });
+  }
+};
+
+
 // POST /surveys 
 exports.createSurvey = (req, res) => {
   const { title, author, questions } = req.body;

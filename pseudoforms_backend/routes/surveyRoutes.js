@@ -260,4 +260,64 @@ router.delete('/:id', surveyController.deleteSurvey);
  *       500:
  *         description: Wewnętrzny błąd serwera.
  */
+router.get('/responses/:id', surveyController.getResponsesBySurveyId);
+/**
+ * @swagger
+ * /surveys/responses/{id}:
+ *   get:
+ *     summary: Pobierz odpowiedzi na pytania ankiety
+ *     tags:
+ *       - Ankiety
+ *     description: Pobiera wszystkie odpowiedzi udzielone na pytania ankiety o podanym ID. Dane zawierają treść pytań, ich typy oraz zebrane odpowiedzi.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID ankiety (survey_id), dla której chcemy pobrać odpowiedzi.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Pobrano odpowiedzi na ankietę.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   question_id:
+ *                     type: integer
+ *                     description: ID pytania.
+ *                   question_text:
+ *                     type: string
+ *                     description: Treść pytania.
+ *                   question_type:
+ *                     type: string
+ *                     description: Typ pytania (np. text, multiple_choice, single_choice).
+ *                   question_options_json:
+ *                     type: string
+ *                     description: JSON-owa tablica możliwych opcji (jeśli dotyczy).
+ *                   responses:
+ *                     type: array
+ *                     description: Lista odpowiedzi udzielonych na to pytanie.
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         response_text_json:
+ *                           type: string
+ *                           description: Odpowiedź w formacie JSON (może to być string, tablica lub tekst, w zależności od typu pytania).
+ *                         respondent_id:
+ *                           type: string
+ *                           nullable: true
+ *                           description: ID respondenta (może być null).
+ *                         submitted_at:
+ *                           type: string
+ *                           format: date-time
+ *                           description: Data i czas wysłania odpowiedzi.
+ *       404:
+ *         description: Nie znaleziono ankiety lub brak odpowiedzi.
+ *       500:
+ *         description: Wewnętrzny błąd serwera.
+ */
 module.exports = router;

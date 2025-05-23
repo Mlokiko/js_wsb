@@ -29,6 +29,12 @@ exports.getSurveyById = (id) => {
 
   return survey;
 };
+
+
+exports.getResponsesBySurveyId = (surveyId) => {
+  return surveyModel.getResponsesBySurveyId(surveyId);
+};
+
 exports.createSurveys = ({ title, author, questions }) => {
   return surveyModel.createSurvey({ title, author, questions });
 };

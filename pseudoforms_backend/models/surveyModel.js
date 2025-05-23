@@ -17,6 +17,31 @@ function getSurveyById(id) {
   `).all(id);
 }
 
+// Teoretycznie pobieranie pytań i odpowiedzi można zrobić w osobnych modelach i potem łączyć w servisie, ale well...
+function getResponsesBySurveyId(surveyId) {
+  const questions = db.prepare(`
+    SELECT id AS question_id, question_text, question_type, question_options_json
+    FROM questions
+    WHERE survey_id = ?
+  `).all(surveyId);
+
+  if (!questions.length) return [];
+
+  return questions.map(question => {
+    const responses = db.prepare(`
+      SELECT response_text_json, respondent_id, submitted_at
+      FROM responses
+      WHERE question_id = ?
+    `).all(question.question_id);
+
+    return {
+      ...question,
+      responses
+    };
+  });
+};
+
+
 function createSurvey({title, author, questions}) {
   let id = uuidv4();
   const stmt = db.prepare(
@@ -50,5 +75,6 @@ module.exports = {
   getSurveyById,
   createSurvey,
   submitSurvey,
-  deleteSurvey
+  deleteSurvey,
+  getResponsesBySurveyId
 };
