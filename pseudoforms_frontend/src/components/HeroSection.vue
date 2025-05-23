@@ -6,9 +6,6 @@
 Niezależnie od tego, czy potrzebujesz szybkiego formularza opinii, czy pełnej ankiety,
 mamy dla Ciebie rozwiązanie.
       </p>
-      <router-link to="/add-form">
-      <button class="add-form-button">Dodaj nowy formularz</button>
-      </router-link>
     </section>
   </template>
   

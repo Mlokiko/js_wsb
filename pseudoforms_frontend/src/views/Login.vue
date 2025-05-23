@@ -62,58 +62,102 @@ axios.post('http://localhost:3000/users/login', {
 }
 </script>
 <style scoped>
+div {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #4f46e5;
+  margin: 2rem 0;
+}
+
+form {
+  max-width: 500px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button[type="submit"] {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+}
+
+button[type="submit"]:hover {
+  background-color: #4338ca;
+}
+
+.Register-button {
+  background-color: white;
+  color: #4f46e5;
+  border: 1px solid #4f46e5;
+  margin-top: 1rem;
+}
+
+.Register-button:hover {
+  background-color: #f5f3ff;
+}
+
+.error {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  form {
+    padding: 2rem;
+  }
+  
   h1 {
     font-size: 2rem;
-    color: #4f46e5;
   }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-
-  label {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  input[type="email"], input[type="password"] {
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  button[type="submit"] {
-    padding: 0.75rem 1.5rem;
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  button[type="submit"]:hover {
-    background-color: #3b3f54;
-  }
-
-  .Register-button {
-    padding: 0.75rem 1.5rem;
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  .Register-button:hover {
-    background-color: #3b3f54;
-  }
+}
 </style>

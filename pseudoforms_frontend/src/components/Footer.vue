@@ -1,6 +1,6 @@
 <template>
     <footer>
-      &copy; 2025 PseudoForms. All rights reserved.
+      &copy; 2025 PseudoForms. Wszystkie prawa zastrzeżone.
     </footer>
   </template>
   
