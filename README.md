@@ -161,7 +161,7 @@ Po chwili w konsoli pojawi się informacja z adresem, na którym działa strona.
         </ul>
     <li>Frontend</li>
         <ul style="list-style-type:none;">
-            <li>src (Źródła)<li>
+            <li>src (Źródła)</li>
                 <ul style="list-style-type:none;">
                     <li>assets</li>
                         <ul style="list-style-type:none;">
