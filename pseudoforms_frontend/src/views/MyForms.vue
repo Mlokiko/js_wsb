@@ -1,27 +1,43 @@
 <template>
   <div>
     <Header />
-    <section class="my-forms" v-if="userId">
+    <section class="my-forms">
       <h2>Moje formularze</h2>
 
-      <div>
-        <h3>Utworzone przeze mnie</h3>
-        <div v-if="createdForms.length === 0">Brak utworzonych formularzy.</div>
-        <ul>
-          <li v-for="form in createdForms" :key="form.id">
-            <router-link :to="`/fill-form/${form.id}`">{{ form.title }}</router-link>
-          </li>
-        </ul>
-      </div>
+      <div v-if="createdForms.length === 0">Brak utworzonych formularzy.</div>
+      <div v-else class="form-list">
+        <div class="form-item" v-for="form in createdForms" :key="form.id">
+          <h3>{{ form.title }}</h3>
+          <p>Stworzone dnia {{ formatDate(form.created_at) }}</p>
+          <div class="buttons">
+            <button class="btn" @click="toggleDetails(form)">Szczegóły</button>
+            <button class="btn danger" @click="deleteForm(form.id)">Usuń</button>
+          </div>
 
-      <div>
-        <h3>Na które odpowiedziałem</h3>
-        <div v-if="answeredForms.length === 0">Brak odpowiedzi.</div>
-        <ul>
-          <li v-for="form in answeredForms" :key="form.id">
-            <router-link :to="`/fill-form/${form.id}`">{{ form.title }}</router-link>
-          </li>
-        </ul>
+          <div v-if="form.showDetails" class="details">
+            <div v-if="form.detailsLoading">Ładowanie szczegółów...</div>
+            <div v-else-if="form.detailsError" class="error">{{ form.detailsError }}</div>
+            <div v-else>
+              <h4>Pytania:</h4>
+              <ul>
+                <li v-for="question in form.questions" :key="question.id" class="question-detail">
+                  <strong>{{ question.text }}</strong> ({{ question.type }})
+                  <div v-if="question.answerStats && Object.keys(question.answerStats).length">
+                    <em>Ilość odpowiedzi:</em>
+                    <ul>
+                      <li v-for="(count, answer) in question.answerStats" :key="answer">
+                        "{{ answer }}" - {{ count }}
+                      </li>
+                    </ul>
+                  </div>
+                  <div v-else>
+                    Brak danych o odpowiedziach dla tego pytania
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <Footer />
@@ -38,32 +54,66 @@ export default {
   data() {
     return {
       userId: null,
-      createdForms: [],
-      answeredForms: [],
+      createdForms: []
     };
   },
   async created() {
-    this.user.name = localStorage.getItem('this.user.name');
-    if (!this.user.name) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.id) {
       console.warn('Brak userId — przekierowanie na stronę główną');
       this.$router.push('/');
       return;
     }
 
-    try {
-      const [createdRes, answeredRes] = await Promise.all([
-        fetch(`http://localhost:3000/users/${this.userId}/forms`),
-        fetch(`http://localhost:3000/users/${this.userId}/responses`)
-      ]);
+    this.userId = user.id;
 
-      if (createdRes.ok) {
-        this.createdForms = await createdRes.json();
-      }
-      if (answeredRes.ok) {
-        this.answeredForms = await answeredRes.json();
-      }
+    try {
+      const res = await fetch(`http://localhost:3000/surveys`);
+      if (!res.ok) throw new Error('Błąd podczas pobierania formularzy');
+      const allForms = await res.json();
+      this.createdForms = allForms.filter(form => form.author === this.userId);
     } catch (err) {
       console.error('Błąd przy pobieraniu formularzy:', err);
+    }
+  },
+  methods: {
+    formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString();
+    },
+    async toggleDetails(form) {
+      if (form.showDetails) {
+        form.showDetails = false; // Zwiń szczegóły
+        return;
+      }
+
+      form.showDetails = true; // Rozwiń szczegóły
+      form.detailsLoading = true;
+      form.detailsError = null;
+
+      try {
+        const res = await fetch(`http://localhost:3000/surveys/${form.id}`);
+        if (!res.ok) throw new Error('Nie udało się pobrać szczegółów formularza');
+        const surveyDetails = await res.json();
+        form.questions = surveyDetails.questions || [];
+      } catch (err) {
+        form.detailsError = err.message;
+      } finally {
+        form.detailsLoading = false;
+      }
+    },
+    async deleteForm(id) {
+      if (!confirm('Czy na pewno chcesz usunąć ten formularz?')) return;
+
+      try {
+        const res = await fetch(`http://localhost:3000/surveys/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (!res.ok) throw new Error('Błąd przy usuwaniu formularza');
+        this.createdForms = this.createdForms.filter(form => form.id !== id);
+      } catch (err) {
+        console.error('Usuwanie nie powiodło się:', err);
+      }
     }
   }
 };
@@ -72,24 +122,56 @@ export default {
 <style scoped>
 .my-forms {
   padding: 2rem;
-  max-width: 700px;
-  margin: 0 auto;
 }
 
-.my-forms h2 {
-  margin-bottom: 1.5rem;
+.form-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.my-forms h3 {
-  margin-top: 2rem;
+.form-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 }
 
-ul {
-  padding-left: 1rem;
-  list-style-type: disc;
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-li {
-  margin-bottom: 0.5rem;
+.btn {
+  display: inline-block;
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #3b3f54;
+}
+
+.btn.danger {
+  background-color: #e53e3e;
+}
+
+.btn.danger:hover {
+  background-color: #c53030;
+}
+
+.details {
+  margin-top: 1rem;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
 }
 </style>

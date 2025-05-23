@@ -114,7 +114,7 @@ export default {
           // jeśli nie masz, poniżej wyświetlam info o braku danych
           let responsesData;
           try {
-            const resResponses = await fetch(`http://localhost:3000/responses?survey_id=${id}`);
+            const resResponses = await fetch(`http://localhost:3000/responses/?survey_id=${id}`);
             if (!resResponses.ok) throw new Error('Brak endpointu odpowiedzi lub błąd podczas pobierania');
             responsesData = await resResponses.json();
           } catch {

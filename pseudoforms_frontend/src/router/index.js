@@ -17,7 +17,7 @@ const routes = [
   { path: '/register', name: 'Register', component: Register },
   { path: '/manage-account', name: 'ManageAccount', component: ManageAccount },
   { path: '/fill-form/:formId', name: 'FillForm', component: FillForm },
-  { path: '/my-forms', name: 'MyForms', component: MyForms } 
+  { path: '/my-forms', name: 'MyForms', component: MyForms },
 ];
 
 const router = createRouter({

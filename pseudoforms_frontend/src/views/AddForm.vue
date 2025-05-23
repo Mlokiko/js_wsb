@@ -8,8 +8,13 @@
           <label for="title">Tytuł Formularza:</label>
           <input type="text" id="title" v-model="formData.title" required />
         </div>
-        
-        
+
+        <div class="form-field">
+          <label>
+            <input type="checkbox" v-model="isAnonymous" />
+            Chcę zostać anonimowy
+          </label>
+        </div>
 
         <div class="questions-container">
           <div v-for="(question, qIndex) in formData.questions" :key="qIndex" class="question">
@@ -80,6 +85,7 @@ export default {
           }
         ]
       },
+      isAnonymous: false, // Nowa zmienna do przechowywania stanu checkboxa
       errorMessage: ''
     };
   },
@@ -104,10 +110,12 @@ export default {
       try {
         // Pobierz dane użytkownika z localStorage
         const userData = JSON.parse(localStorage.getItem('user'));
-        if (userData && userData.name) {
+        if (this.isAnonymous) {
+          this.formData.author = 'anonymous'; // Ustaw na 'anonymous' jeśli checkbox zaznaczony
+        } else if (userData && userData.name) {
           this.formData.author = userData.name; // Przypisz ID użytkownika do pola author
         } else {
-          this.formData.author = 'anonymous'; // Ustaw na 'anonymous' jeśli brak ID
+          this.formData.author = 'Brak'; // Ustaw na 'Brak' jeśli brak ID
         }
 
         const response = await fetch('http://localhost:3000/surveys', {
