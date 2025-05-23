@@ -5,7 +5,7 @@ openapi: `3.0.0`,
 info: {
 title: `API PseudoForms`,
 version: `1.0.0`,
-description: `PseudoForms API - Opis, którego nie ma, i być nie będzie - nie chce mi sie`,
+description: `PseudoForms API - Opis, którego nie ma, i być nie będzie`,
 },
 tags: [
     {

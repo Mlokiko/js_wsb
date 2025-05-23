@@ -4,6 +4,19 @@
     <section class="fill-form">
       <h2>Wypełnij formularz: {{ form.title }}</h2>
       <form @submit.prevent="submitForm" v-if="form.questions && form.questions.length">
+<<<<<<< HEAD
+=======
+        <div class="form-field">
+          <label for="respondentName">Twoja nazwa (opcjonalnie):</label>
+          <input
+            type="text"
+            id="respondentName"
+            v-model="respondentName"
+            placeholder="Wpisz swoją nazwę lub pozostaw puste"
+          />
+        </div>
+
+>>>>>>> e2f0a3ccf8f105aa565166e6822fdab31d8661a5
         <div v-for="(question, qIndex) in form.questions" :key="qIndex" class="question-block">
           <label class="question-text">{{ question.text }}</label>
 
@@ -66,7 +79,12 @@ export default {
   data() {
     return {
       form: {},
+<<<<<<< HEAD
       responses: []
+=======
+      responses: [],
+      respondentName: ''
+>>>>>>> e2f0a3ccf8f105aa565166e6822fdab31d8661a5
     };
   },
   async created() {
@@ -82,6 +100,7 @@ export default {
     );
   },
   methods: {
+<<<<<<< HEAD
    async submitForm() {
   try {
     const payload = {
@@ -108,6 +127,36 @@ export default {
   }
 }
 
+=======
+    async submitForm() {
+      try {
+        // Ustaw respondentName na 'anonymous' jeśli jest puste lub tylko białe znaki
+        const respondent_id = this.respondentName.trim() ? this.respondentName.trim() : 'anonymous';
+
+        const payload = {
+          respondent_id,
+          responses: this.form.questions.map((q, i) => ({
+            question_id: q.id,
+            response_text: Array.isArray(this.responses[i]) ? this.responses[i].join(', ') : this.responses[i]
+          }))
+        };
+
+        const res = await fetch(`http://localhost:3000/surveys/${this.form.id}/submit`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error('Nie udało się wysłać odpowiedzi');
+
+        alert('Dziękujemy za wypełnienie formularza!');
+        this.$router.push('/all-forms');
+      } catch (error) {
+        alert('Błąd podczas wysyłania odpowiedzi. Spróbuj ponownie.');
+        console.error(error);
+      }
+    }
+>>>>>>> e2f0a3ccf8f105aa565166e6822fdab31d8661a5
   }
 };
 </script>
@@ -119,6 +168,13 @@ export default {
   margin: 0 auto;
 }
 
+<<<<<<< HEAD
+=======
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+>>>>>>> e2f0a3ccf8f105aa565166e6822fdab31d8661a5
 .question-block {
   margin-bottom: 1.5rem;
 }
@@ -154,4 +210,8 @@ input[type='text'] {
 .submit-btn:hover {
   background-color: #3b3f54;
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> e2f0a3ccf8f105aa565166e6822fdab31d8661a5

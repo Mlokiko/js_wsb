@@ -2,10 +2,24 @@
   <header>
     <router-link to="/" class="logo">FormHub</router-link>
     <nav class="nav-links">
+<<<<<<< HEAD
       <router-link v-if="!isLoggedIn" to="/login">Logowanie/Rejestracja</router-link>
       <router-link v-if="isLoggedIn" to="/my-forms">Moje formularze</router-link>
       <router-link v-if="isLoggedIn" to="/manage-account">Dane konta</router-link>
       <a v-if="isLoggedIn" @click.prevent="logout" href="#">Wyloguj</a>
+=======
+      <router-link v-if="!isLoggedIn" to="/login">
+        <a href="#">Logowanie/Rejestracja</a>
+      </router-link>
+      <router-link v-if="isLoggedIn" to="/my-forms"> <a href="#">Moje formularze</a></router-link>
+
+      <router-link v-if="isLoggedIn" to="/manage-account">
+        <a href="#">Dane konta</a>
+      </router-link>
+      <router-link v-if="isLoggedIn" @click.prevent="logout">
+        <a @click="logout">Wyloguj</a>
+      </router-link>
+>>>>>>> e2f0a3ccf8f105aa565166e6822fdab31d8661a5
     </nav>
   </header>
 </template>

@@ -49,11 +49,14 @@ axios.post('http://localhost:3000/users/login', {
       .then(response => {
         localStorage.setItem('user', JSON.stringify(response.data)); // Zapisanie sesji
         this.$router.push('/'); // Przekierowanie na stronę główną
-      })
-      .catch(error => {
-        this.errorMessage = 'Wystąpił błąd podczas logowania. Sprawdź swoje dane i spróbuj ponownie.'; // Ustawienie komunikatu o błędzie
-        console.error(error);
-      });
+      }).then(response => {
+    localStorage.setItem('user.name', response.data.name); // Zapisanie nazwy użytkownika
+    this.$router.push('/'); // Przekierowanie na stronę główną
+  })
+  .catch(error => {
+    this.errorMessage = 'Wystąpił błąd podczas logowania. Sprawdź swoje dane i spróbuj ponownie.';
+    console.error(error);
+  });
     }
   }
 }

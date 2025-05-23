@@ -44,12 +44,26 @@ exports.createSurvey = (req, res) => {
 // PUT /surveys/:id/submit 
 exports.submitSurvey = (req, res) => {
   const { id } = req.params;
-  const submition = req.body;
-  const survey = surveyService.getSurveyById(id);
+  const { respondent_id, responses } = req.body; // Upewnij się, że odpowiedzi są w odpowiednim formacie
 
+  const survey = surveyService.getSurveyById(id);
   if (!survey) {
     return res.status(404).json({ error: 'Ankieta nie znaleziona' });
   }
+
+  // Sprawdzenie, czy odpowiedzi są poprawne
+  if (!Array.isArray(responses) || responses.length !== survey.questions.length) {
+    return res.status(400).json({ error: 'Nieprawidłowy typ odpowiedzi' });
+  }
+
+  const success = surveyService.submitSurvey(id, respondent_id, responses);
+  if (success) {
+    res.status(200).json({ message: 'Wysłano odpowiedzi' });
+  } else {
+    res.status(500).json({ error: 'Nie udało się wysłać odpowiedzi' });
+  }
+};
+
   
   // Jak zrobić sprawdzanie, czy odpowiedzi pasują? tzn, czy np. do pytania single_choice nie jest wysyłana tablica z ponad 1 odpowiedzią?
   // teoretycznie tutaj musi to być zrobione, ale w surveyModel mamy logikę która przez każdą odpowiedz/pytanie iteruje... Trzeba to pozmieniać
@@ -59,14 +73,7 @@ exports.submitSurvey = (req, res) => {
   // if (submition.question_id != survey.id) {
   //   return res.status(400).json({ error: 'Nieprawidłowy typ odpowiedzi' });
   // }
-  const success = surveyService.submitSurvey(id, submition.respondent_id, submition.responses);
 
-  if (success) {
-    res.status(200).json({ message: 'Wysłano odpowiedzi' });
-  } else {
-    res.status(500).json({ error: 'Nie udało się wysłać odpowiedzi' });
-  }
-};
 
 // DELETE /surveys/:id 
 exports.deleteSurvey = (req, res) => {
