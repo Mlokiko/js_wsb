@@ -3,8 +3,10 @@ const { v4: uuidv4 } = require('uuid');
 
 // Zwraca same survey bez pytań i odpowiedzi - potem można dodać metodę getAllSurveysFull
 function getAllSurveys() {
-  return db.prepare(`SELECT * FROM surveys`).all();
+  return db.prepare(`
+    SELECT id, title, author_id AS author, created_at FROM surveys`).all();
 }
+
 
 function getSurveyById(id) {
   return db.prepare(`
