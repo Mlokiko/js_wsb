@@ -3,7 +3,7 @@
     <Header />
     <h1>Rejestracja</h1>
     <form @submit.prevent="register">
-      <label for="name">Imię i nazwisko:</label>
+      <label for="name">Nazwa użytkownika:</label>
       <input type="text" id="name" v-model="name" required />
       <br />
       <label for="email">Adres e-mail:</label>

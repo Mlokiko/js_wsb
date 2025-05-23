@@ -1,6 +1,6 @@
 <template>
     <section class="hero">
-      <h1>Witaj w FormHub</h1>
+      <h1>Witaj w PseudoForms</h1>
       <p>
         Twórz, udostępniaj i zarządzaj wszystkimi swoimi formularzami online w jednym miejscu.
 Niezależnie od tego, czy potrzebujesz szybkiego formularza opinii, czy pełnej ankiety,

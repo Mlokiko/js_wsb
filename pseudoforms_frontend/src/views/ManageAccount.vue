@@ -5,7 +5,7 @@
     <p>Witaj, {{ user.name }}!</p>
     <p>Twoje konto:</p>
     <ul>
-      <li>Imię i nazwisko: {{ user.name }}</li>
+      <li>Nazwa użytkownika: {{ user.name }}</li>
       <li>Adres e-mail: {{ user.email }}</li>
     </ul>
     <form @submit.prevent="changeName">

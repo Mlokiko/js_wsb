@@ -1,6 +1,6 @@
 <template>
   <header>
-    <router-link to="/" class="logo">FormHub</router-link>
+    <router-link to="/" class="logo">PseudoForms</router-link>
     <nav class="nav-links">
       <router-link v-if="!isLoggedIn" to="/login">
         <a href="#">Logowanie/Rejestracja</a>
