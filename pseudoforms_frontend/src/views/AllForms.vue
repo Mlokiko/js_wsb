@@ -91,10 +91,11 @@ export default {
       this.$router.push({ name: 'FillForm', params: { formId: id } });
     },
     async toggleDetails(id) {
+      
       const idx = this.forms.findIndex(f => f.id === id);
       if (idx === -1) return;
       const form = this.forms[idx];
-
+console.log(`Próba pobrania odpowiedzi dla ankiety o ID: ${id}`);
       if(form.showDetails) { // Jeśli już pokazane, chowamy
         this.forms[idx].showDetails = false;
         return;
@@ -114,7 +115,7 @@ export default {
           // jeśli nie masz, poniżej wyświetlam info o braku danych
           let responsesData;
           try {
-            const resResponses = await fetch(`http://localhost:3000/responses/?survey_id=${id}`);
+            const resResponses = await fetch(`http://localhost:3000/surveys/responses/${id}`);
             if (!resResponses.ok) throw new Error('Brak endpointu odpowiedzi lub błąd podczas pobierania');
             responsesData = await resResponses.json();
           } catch {
